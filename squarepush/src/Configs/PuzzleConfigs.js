@@ -84,3 +84,4 @@ export const config_6x6 = {
         { "color" : "blue", "row": "5", "column" : "C" }
     ]
 }
+

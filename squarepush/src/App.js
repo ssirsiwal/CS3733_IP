@@ -7,16 +7,17 @@ import { drawGrid, redrawCanvas } from './Boundaries/Boundaries.js';
 import { useState, useRef } from 'react' 
 import {moveNinja, shoveColor , removeBlockController, resetButton, selectConfig} from './Controllers/Controllers.js';
 import ninjase from './ninjase.svg';
+import {config_5x5 } from './Configs/puzzleConfigs.js';
 
 
 function App() {
   // initial instantiation of the Model
   //const [currentConfig, setCurrentConfiguration] = React.useState(new Model(0));ù
-  const [currentConfig, setCurrentConfig] = useState(0)
-  const [model, setModel] = useState(new Model(currentConfig));  // only place where Model object is instantiated.
-  const [redraw, forceRedraw] = useState(0);    // change values to force redraw
-  const appRef = useRef(null);      // Later need to be able to refer to App 
-  const canvasRef = useRef(null);   // Later need to be able to refer to Canvas
+  const [currentConfig, setCurrentConfig] = React.useState(0)
+  const [model, setModel] = React.useState(new Model(currentConfig));  // only place where Model object is instantiated.
+  const [redraw, forceRedraw] = React.useState(0);    // change values to force redraw
+  const appRef = React.useRef(null);      // Later need to be able to refer to App 
+  const canvasRef = React.useRef(null);   // Later need to be able to refer to Canvas
 
   /** Ensures initial rendering is performed, and that whenever model changes, it is re-rendered. */
   React.useEffect (() => {
@@ -44,7 +45,7 @@ function App() {
 }
 
 
-const setConfiguration = (config) => {
+const setConfig = (config) => {
   let newModel = selectConfig(model, config);
   setModel(newModel); // react to changes, if model has changed.
   setCurrentConfig(config)
@@ -68,9 +69,9 @@ const setConfiguration = (config) => {
         <label className="movecounter" > {"Move Counter: " + model.moves}</label>
         <div style = {layout.buttons}>
 
-        <button style = {layout.config4x4}  onClick={(e) => setConfiguration(1)}> configuration 4x4 </button>
-          <button style = {layout.config5x5} onClick={(e) => setConfiguration(0)}> configuration 5x5 </button>
-          <button style = {layout.config6x6}   onClick={(e) => setConfiguration(2)}> configuration 6x6 </button>
+        <button style = {layout.config5x5}  onClick={(e) => setConfig(config_5x5)}> configuration 4x4 </button>
+          <button style = {layout.config5x5} onClick={(e) => setConfig(config_5x5)}> configuration 5x5 </button>
+          <button style = {layout.config6x6}   onClick={(e) => setConfig(2)}> configuration 6x6 </button>
 
           <button style = {layout.upbutton}  onClick={(e) => moveNinja(Up)} disabled ={!model.isAvailable(Up)}> Up </button>
           <button style = {layout.downbutton} onClick={(e) => moveNinja(Down)} disabled ={!model.isAvailable(Down)}> Down </button>

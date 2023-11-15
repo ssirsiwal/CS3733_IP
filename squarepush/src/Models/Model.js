@@ -79,13 +79,14 @@ export class PlayBoard {
     constructor (numRows, numColumns) {
         this.numRows = numRows;
         this.numCol = numColumns;
-        this.grid = Array.from(Array(this.numRows), () => new Array(this.numRows));
+        this.grid = Array.from(Array(this.numRows), () => new Array(this.numColumns));
     }
 
     /**
      * function clone creates a copy of the current PlayBoard obj
      * @returns PlayBoard
      */
+    /*
     clone(){
         let r = this.numRows;
         let c = this.numCol;
@@ -97,7 +98,7 @@ export class PlayBoard {
             }
         }
         return b;
-    }
+    }*/
 
 
 }
@@ -148,6 +149,9 @@ export default class Model {
      * @param {puzzleConfig} currentConfig 
      */
     initialize(currentConfig){
+
+        let numRows = parseInt(this.currentConfig.numRows);
+        let numCol = parseInt(this.currentConfig.numColumns);
         this.config = configs[currentConfig];
         this.score = 0;
         this.moves = 0;
@@ -157,16 +161,16 @@ export default class Model {
         this.NinjaSeRow = parseInt(this.config.ninjaRow) - 1;
         this.NinjaSeColumn = this.parseColumn(this.config.ninjaColumn);
 
-        let numRows = parseInt(this.config.numRows);
-        let numCol = parseInt(this.config.numColumns);
+        
 
         this.playboard = new PlayBoard(numRows, numCol);
         
+        /*
         for (let r = 0; r < numRows; r++) {
             for (let c = 0; c < numCol; c++) {
                 this.playboard.grid[r][c] = new Piece(r,c, "white") //this is not working
             }
-        }
+        }*/
 
         for(let i = 0; i < this.config.initial.length; i++){
             let c = Math.abs(this.config.initial[i].column.charCodeAt(0) - 65);
