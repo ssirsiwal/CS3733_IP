@@ -1,4 +1,4 @@
-import Model, { Square, Down, Up, Left, Right} from '../Models/Models.js';
+import Model, { Square, Down, Up, Left, Right} from '../Models/Model.js';
 import { Canvas } from 'canvas';
 import {drawImage} from 'canvas';
 
