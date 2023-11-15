@@ -5,10 +5,12 @@ import {drawImage} from 'canvas';
 const OFFSET = 8
 const BOXSIZE = 100;
 
+/**
+ * function drawGrid draws the grid for the game board
+ * @param {canvasObj} ctx 
+ * @param {Model} model 
+ */
 export function drawGrid(ctx, model) {
-  //ctx.shadowColor = 'black';
-
-  // draw board
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, model.board.numberOfRows*BOXSIZE, model.board.numberOfColumns*BOXSIZE);
 
@@ -23,7 +25,12 @@ export function drawGrid(ctx, model) {
 
 }
 
-export function redrawCanvas(model, canvasObj, appObj) {
+/**
+ * function redrawCanvas resets the grid
+ * @param {Model} model 
+ * @param {canvasObj} canvasObj 
+ */
+export function redrawCanvas(model, canvasObj) {
     const ctx = canvasObj.getContext('2d');
     if (ctx === null) { return; }
     
