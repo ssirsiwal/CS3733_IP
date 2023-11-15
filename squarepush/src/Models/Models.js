@@ -1,14 +1,19 @@
 import { config_4x4, config_5x5, config_6x6 } from "../Configs/puzzleConfigs.js";
 
-// someone needs to know about these configurations. Perhaps we should!
 const configs = [ config_5x5, config_4x4, config_6x6 ]
 
+// class MoveType constructs MoveType objs which hold the row/column change information for all moves
 export class MoveType {
     constructor(deltaRow, deltaCol) {
         this.deltar = deltaRow;
         this.deltac = deltaCol;
     }
 
+    /** 
+    * function parse takes user input and interprets which move type is being called
+    * @param {string} s 
+    * @returns MoveType
+    */
     static parse(s) {
         if(s === "down") {
             return Down;
@@ -27,12 +32,14 @@ export class MoveType {
     }
 }
 
+// construct all five MoveType objs used in the game
 export const Down = new MoveType(1, 0, "down");
 export const Up = new MoveType(-1, 0, "up");
 export const Left = new MoveType(0, -1, "left");
 export const Right = new MoveType(0, 1, "right");
 export const NoMove = new MoveType(0, 0, "*");
 
+// class Coordinate constructs Coordinate objs that hold some element's row/column information 
 export class Coordinate {
     constructor(row, col) {
         this.row = row;
@@ -40,23 +47,33 @@ export class Coordinate {
     }
 }
 
-export class Square {
+// class Piece constructs Piece objs that contain the row, column, and color information of a square
+export class Piece {
     constructor(row, col, color) {
         this.row = row;
         this.column = col;
         this.color = color;
     }
 
+    /**
+     * function location returns the current board coordinates of the piece
+     * @returns Coordinate
+     */
     location() {
         return new Coordinate(this.row, this.column);
     }
 
+    /**
+     * function copy creates an exact copy of the piece in it's board coordinate position
+     * @returns Piece
+     */
     copy(){
-        let s = new Square(this.row, this.column, this.color);
+        let s = new Piece(this.row, this.column, this.color);
         return s;
     }
 }
 
+// class PlayBoard creates PlayBoard objs that contain the number of rows and columns in the game board
 export class PlayBoard {
     constructor (numRows, numColumns) {
         this.numRows = numRows;
@@ -64,7 +81,10 @@ export class PlayBoard {
         this.grid = Array.from(Array(this.numRows), () => new Array(this.numRows));
     }
 
-
+    /**
+     * function clone creates a copy of the current PlayBoard obj
+     * @returns PlayBoard
+     */
     clone(){
         let r = this.numRows;
         let c = this.numCol;
@@ -81,9 +101,14 @@ export class PlayBoard {
 
 }
 
+// class Model creates Model objs that contain the information about the construction of the game board and the config of the pieces
 export default class Model {
-    // info is going to be JSON-encoded puzzle
 
+    /**
+     * function parseColumns converts the string column markers to intergers to make the value easier to interpret and manipulate
+     * @param {string} s 
+     * @returns {int} column value
+     */
     parseColumn(s){
         if(s === "A"){ return 0;}
         else if(s === "B"){ return 1;}
@@ -94,6 +119,11 @@ export default class Model {
         else if( s === "G"){ return 6;} 
     }
 
+    /**
+     * function parseColor converts the string color value to the color value it represents for use by the code
+     * @param {string} s 
+     * @returns color
+     */
     parseColor(s){
         if(s === "red"){ return 'red';}
         else if(s === "orange"){return 'orange';}
@@ -112,8 +142,11 @@ export default class Model {
         this.initialize(currentConfig);
     }
     
+    /**
+     * initialize takes a puzzle configuration and initializes gameplay using it's parameters
+     * @param {puzzleConfig} currentConfig 
+     */
     initialize(currentConfig){
-
         this.config = configs[currentConfig];
         this.score = 0;
         this.moves = 0;
@@ -126,14 +159,13 @@ export default class Model {
         let numRows = parseInt(this.config.numRows);
         let numCol = parseInt(this.config.numColumns);
 
-        this.board = new Board(numRows, numCol);
+        this.playboard = new PlayBoard(numRows, numCol);
         
         for (let r = 0; r < numRows; r++) {
             for (let c = 0; c < numCol; c++) {
-                this.board.grid[r][c] = new Square(r,c, "white") //this is not working
+                this.board.grid[r][c] = new Piece(r,c, "white") //this is not working
             }
         }
-        // set the color square
 
         for(let i = 0; i < this.config.initial.length; i++){
             let c = Math.abs(this.config.initial[i].column.charCodeAt(0) - 65);
@@ -142,8 +174,11 @@ export default class Model {
             this.board.grid[r][c].color = color;
         }
     }
-    
 
+    /**
+     * function resetModel resets the model to the inital config
+     * @param {puzzleConfig} currentConfig 
+     */
     resetModel(currentConfig){
 
         this.config = configs[currentConfig];
@@ -174,7 +209,10 @@ export default class Model {
         }
     }
 
-
+    /**
+     * function selectConfig allows user to request a different puzzle config
+     * @param {puzzleConfig} currentConfig 
+     */
     selectConfig(currentConfig){
         
         this.config = configs[currentConfig];
@@ -205,7 +243,11 @@ export default class Model {
         }
     }
 
-    
+    /**
+     * function isAvailable is a function that takes the user's requested direction for ninjase to move and determines if that is an available move
+     * @param {MoveType} direction 
+     * @returns boolean
+     */
     isAvailable(direction){
         if(this.NinjaSeRow === 0 && direction === Up){ return false; }
         else if(this.NinjaSeRow === (this.board.numberOfRows - 2) && direction === Down){ return false;}
@@ -217,7 +259,10 @@ export default class Model {
         }
     }
 
-    
+    /**
+     * function isRemovable determines wether the conditions have been met to remove a group of pieces
+     * @returns boolean
+     */
     isRemoveable(){
         for(let r = 0; r < this.board.numRows; r++){
             for(let c = 0; c < this.board.numCol; c = c + 2){
@@ -300,10 +345,12 @@ export default class Model {
     }
         return false;
     } 
-    
-  
 
-    copy(){
+    /**
+     * function clone creates a copy of the model
+     * @returns Model
+     */
+    clone(){
         let m = new Model(this.currentConfig);
         m.board = this.board.clone();
         m.NinjaSeRow = this.NinjaSeRow;
@@ -314,6 +361,10 @@ export default class Model {
         return m;
     }
 
+    /**
+     * function isVictorious determines if the model has met the conditions for the user to be victorious
+     * @returns boolean
+     */
     isVictorious(){
         for(let r = 0; r < this.board.numRows; r++){
             for(let c = 0; c < this.board.numCol; c++){

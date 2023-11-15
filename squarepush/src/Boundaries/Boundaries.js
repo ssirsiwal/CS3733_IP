@@ -1,3 +1,4 @@
+import Model, { Square, Down, Up, Left, Right} from '../Models/Models.js';
 import { Canvas } from 'canvas';
 import {drawImage} from 'canvas';
 
@@ -46,9 +47,9 @@ export function redrawCanvas(model, canvasObj, appObj) {
       ctx.font = '25px san-serif';
       ctx.strokeStyle = 'black';
       ctx.lineWidth = 8;
-      ctx.strokeText('Well done, you won!',40, 155);
+      ctx.strokeText('Well done, you win!',40, 155);
       ctx.fillStyle = 'GREEN';
-      ctx.fillText('Well done, you won!', 40, 155);
+      ctx.fillText('Well done, you win!', 40, 155);
     }
 
 }
