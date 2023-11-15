@@ -1,6 +1,5 @@
 import Model, { Square, Down, Up, Left, Right} from '../Models/Model.js';
-import { Canvas } from 'canvas';
-import {drawImage} from 'canvas';
+import { layout } from '../Configs/LayoutConfig.js';
 
 const OFFSET = 8
 const BOXSIZE = 100;

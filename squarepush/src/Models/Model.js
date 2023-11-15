@@ -1,3 +1,4 @@
+
 import { config_4x4, config_5x5, config_6x6 } from "../Configs/puzzleConfigs.js";
 
 const configs = [ config_5x5, config_4x4, config_6x6 ]
@@ -163,7 +164,7 @@ export default class Model {
         
         for (let r = 0; r < numRows; r++) {
             for (let c = 0; c < numCol; c++) {
-                this.board.grid[r][c] = new Piece(r,c, "white") //this is not working
+                this.playboard.grid[r][c] = new Piece(r,c, "white") //this is not working
             }
         }
 
@@ -171,7 +172,7 @@ export default class Model {
             let c = Math.abs(this.config.initial[i].column.charCodeAt(0) - 65);
             let r = parseInt(this.config.initial[i].row) - 1;
             let color = this.parseColor(this.config.initial[i].color);
-            this.board.grid[r][c].color = color;
+            this.playboard.grid[r][c].color = color;
         }
     }
 
@@ -187,16 +188,16 @@ export default class Model {
         this.moves = 0;
         this.victory = false;
 
-        this.board.numRows = parseInt(this.config.numRows);
-        this.board.numCol = parseInt(this.config.numColumns);
+        this.playboard.numRows = parseInt(this.config.numRows);
+        this.playboard.numCol = parseInt(this.config.numColumns);
 
         this.NinjaSeRow = parseInt(this.config.ninjaRow) - 1;
         this.NinjaSeCol = this.parseColumn(this.config.ninjaColumn);
 
-        for (let r = 0; r < this.board.numRows; r++) {
-            for (let c = 0; c < this.board.numCol; c++) {
-                if(this.board.grid[r][c].color !== "white"){
-                    this.board.grid[r][c].color = "white";
+        for (let r = 0; r < this.playboard.numRows; r++) {
+            for (let c = 0; c < this.playboard.numCol; c++) {
+                if(this.playboard.grid[r][c].color !== "white"){
+                    this.playboard.grid[r][c].color = "white";
                 }
             }
         }
@@ -205,7 +206,7 @@ export default class Model {
             let c = Math.abs(this.config.initial[i].column.charCodeAt(0) - 65);
             let r = parseInt(this.config.initial[i].row) - 1;
             let color = this.parseColor(this.config.initial[i].color);
-            this.board.grid[r][c].color = color;
+            this.playboard.grid[r][c].color = color;
         }
     }
 
@@ -221,16 +222,16 @@ export default class Model {
         this.moves = 0;
         this.victory = false;
 
-        this.board.numRows = parseInt(this.config.numRows);
-        this.board.numCol = parseInt(this.config.numCol);
+        this.playboard.numRows = parseInt(this.config.numRows);
+        this.playboard.numCol = parseInt(this.config.numCol);
 
         this.NinjaSeRow = parseInt(this.config.ninjaRow) - 1;
         this.NinjaSeCol = this.parseColumn(this.config.ninjaColumn);
 
-        for (let r = 0; r < this.board.numRows; r++) {
-            for (let c = 0; c < this.board.numCol; c++) {
-                if(this.board.grid[r][c].color !== "white"){
-                    this.board.grid[r][c].color = "white";
+        for (let r = 0; r < this.playboard.numRows; r++) {
+            for (let c = 0; c < this.playboard.numCol; c++) {
+                if(this.playboard.grid[r][c].color !== "white"){
+                    this.playboard.grid[r][c].color = "white";
                 }
             }
         }
@@ -239,7 +240,7 @@ export default class Model {
             let c = Math.abs(this.config.initial[i].column.charCodeAt(0) - 65);
             let r = parseInt(this.config.initial[i].row) - 1;
             let color = this.parseColor(this.config.initial[i].color);
-            this.board.grid[r][c].color = color;
+            this.playboard.grid[r][c].color = color;
         }
     }
 
@@ -250,9 +251,9 @@ export default class Model {
      */
     isAvailable(direction){
         if(this.NinjaSeRow === 0 && direction === Up){ return false; }
-        else if(this.NinjaSeRow === (this.board.numberOfRows - 2) && direction === Down){ return false;}
+        else if(this.NinjaSeRow === (this.playboard.numberOfRows - 2) && direction === Down){ return false;}
         else if(this.NinjaSeColumn === 0 && direction === Left){ return false;}
-        else if(this.NinjaSeColumn === (this.board.numberOfColumns - 2) && direction === Right){ return false;}
+        else if(this.NinjaSeColumn === (this.playboard.numberOfColumns - 2) && direction === Right){ return false;}
         else if(this.victory === true){return false;}
         else{
             return true;
@@ -264,59 +265,59 @@ export default class Model {
      * @returns boolean
      */
     isRemoveable(){
-        for(let r = 0; r < this.board.numRows; r++){
-            for(let c = 0; c < this.board.numCol; c = c + 2){
-               if(this.board.grid[r][c].color !== "white"){
-                let color = this.board.grid[r][c].color;
+        for(let r = 0; r < this.playboard.numRows; r++){
+            for(let c = 0; c < this.playboard.numCol; c = c + 2){
+               if(this.playboard.grid[r][c].color !== "white"){
+                let color = this.playboard.grid[r][c].color;
 
                 if(r === 0){
                     if(c === 0){
-                        if((this.board.grid[r][c].color === color) &&
-                            (this.board.grid[r + 1][c].color === color) &&
-                            (this.board.grid[r][c + 1].color === color) &&
-                            (this.board.grid[r + 1][c + 1].color === color)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                            (this.playboard.grid[r + 1][c].color === color) &&
+                            (this.playboard.grid[r][c + 1].color === color) &&
+                            (this.playboard.grid[r + 1][c + 1].color === color)){
                                 return true;
                         }
                     }
-                    else if(c === (this.board.numberOfColumns - 1)){
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r][c - 1].color === color) &&
-                        (this.board.grid[r + 1][c].color === color) &&
-                        (this.board.grid[r + 1][c - 1].color === color)){
+                    else if(c === (this.playboard.numberOfColumns - 1)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r][c - 1].color === color) &&
+                        (this.playboard.grid[r + 1][c].color === color) &&
+                        (this.playboard.grid[r + 1][c - 1].color === color)){
                             return true;
                         }
                     }
                     else{
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r + 1][c].color === color) &&
-                        (this.board.grid[r][c + 1].color === color) &&
-                        (this.board.grid[r + 1][c + 1].color === color)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r + 1][c].color === color) &&
+                        (this.playboard.grid[r][c + 1].color === color) &&
+                        (this.playboard.grid[r + 1][c + 1].color === color)){
                             return true;
                         }
                     }
                 }
-                else if(r === (this.board.numberOfRows - 1)){
+                else if(r === (this.playboard.numberOfRows - 1)){
                     if(c === 0){
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r - 1][c].color === color) &&
-                        (this.board.grid[r][c + 1].color === color) &&
-                        (this.board.grid[r - 1][c + 1].color === color)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r - 1][c].color === color) &&
+                        (this.playboard.grid[r][c + 1].color === color) &&
+                        (this.playboard.grid[r - 1][c + 1].color === color)){
                             return true;
                         }
                     }
-                    else if(c === (this.board.numberOfColumns - 1)){
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r - 1][c].color === color) &&
-                        (this.board.grid[r - 1][c - 1].color === color) &&
-                        (this.board.grid[r][c - 1].color === color)){
+                    else if(c === (this.playboard.numberOfColumns - 1)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r - 1][c].color === color) &&
+                        (this.playboard.grid[r - 1][c - 1].color === color) &&
+                        (this.playboard.grid[r][c - 1].color === color)){
                             return true;
                         }
                     }
                     else{
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r - 1][c].color === color) &&
-                        (this.board.grid[r][c + 1].color === color) &&
-                        (this.board.grid[r - 1][c + 1].color === color)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r - 1][c].color === color) &&
+                        (this.playboard.grid[r][c + 1].color === color) &&
+                        (this.playboard.grid[r - 1][c + 1].color === color)){
                             return true;
                         }
                     }
@@ -324,18 +325,18 @@ export default class Model {
                 }
                 else{
                     if(c === 0){
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r][c + 1].color === color) &&
-                        (this.board.grid[r + 1][c].color === color) &&
-                        (this.board.grid[r + 1][c + 1].color === color)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r][c + 1].color === color) &&
+                        (this.playboard.grid[r + 1][c].color === color) &&
+                        (this.playboard.grid[r + 1][c + 1].color === color)){
                             return true;
                         }
                     }
-                    else if(c === (this.board.numberOfColumns - 1)){
-                        if((this.board.grid[r][c].color === color) &&
-                        (this.board.grid[r][c - 1].color === color) &&
-                        (this.board.grid[r - 1][c].color === color) &&
-                        (this.board.grid[r - 1][c - 1].color === color)){
+                    else if(c === (this.playboard.numberOfColumns - 1)){
+                        if((this.playboard.grid[r][c].color === color) &&
+                        (this.playboard.grid[r][c - 1].color === color) &&
+                        (this.playboard.grid[r - 1][c].color === color) &&
+                        (this.playboard.grid[r - 1][c - 1].color === color)){
                             return true;
                         }
                     }
@@ -352,7 +353,7 @@ export default class Model {
      */
     clone(){
         let m = new Model(this.currentConfig);
-        m.board = this.board.clone();
+        m.playboard = this.playboard.clone();
         m.NinjaSeRow = this.NinjaSeRow;
         m.NinjaSeColumn = this.NinjaSeColumn;
         m.moves = this.moves;
@@ -366,9 +367,9 @@ export default class Model {
      * @returns boolean
      */
     isVictorious(){
-        for(let r = 0; r < this.board.numRows; r++){
-            for(let c = 0; c < this.board.numCol; c++){
-                if(this.board.grid[r][c].color !== "white"){
+        for(let r = 0; r < this.playboard.numRows; r++){
+            for(let c = 0; c < this.playboard.numCol; c++){
+                if(this.playboard.grid[r][c].color !== "white"){
                     return false;
                 }
             }
